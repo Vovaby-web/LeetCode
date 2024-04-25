@@ -1,4 +1,4 @@
-package Lessons.LeetCode.Yandex.L5_dfs_bfs;
+package Yandex.L5_dfs_bfs;
 public class T200_NumberIsland {
   public static void main(String[] args) {
     char[][] a = {
