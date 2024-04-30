@@ -1,31 +1,52 @@
+// https://leetcode.com/problems/remove-invalid-parentheses/description/
 package Yandex.L5_dfs_bfs;
 import java.util.*;
 public class T301_RemoveInvalidPar {
  public static void main(String[] args) {
-  System.out.println(removeInvalidParentheses("()())()"));
+  System.out.println(removeInvalidParentheses("(abc))"));
  }
  public static List<String> removeInvalidParentheses(String s) {
-  List<String> result = new ArrayList<>();
-  remove(s, result, 0, 0, new char[]{'(', ')'});
-  return result;
- }
- public static void remove(String s, List<String> result, int last_i, int last_j, char[] par) {
-  for (int i = last_i, stack = 0; i < s.length(); i++) {
-   if (s.charAt(i) == par[0])
-    stack++;
-   if (s.charAt(i) == par[1])
-    stack--;
-   if (stack >= 0)
-    continue;
-   for (int j = last_j; j <= i; ++j)
-    if (s.charAt(j) == par[1] && (j == last_j || s.charAt(j - 1) != par[1]))
-     remove(s.substring(0, j) + s.substring(j + 1, s.length()), result, i, j, par);
-   return;
+  List<String> res = new ArrayList<>();
+  Set<String> visited = new HashSet<>();
+  Queue<String> queue = new LinkedList<>();
+  queue.offer(s);
+  visited.add(s);
+  boolean found = false;
+  while (!queue.isEmpty()) {
+   String current = queue.poll();
+   if (isValid(current)) {
+    res.add(current);
+    found = true;
+   }
+   if (found) continue;
+   for (int i = 0; i < current.length(); i++) {
+    if (current.charAt(i) != '(' && current.charAt(i) != ')')
+     continue;
+    String next = current.substring(0, i) + current.substring(i + 1);
+    if (!visited.contains(next)) {
+     queue.offer(next);
+     visited.add(next);
+    }
+   }
   }
-  String reversed = new StringBuilder(s).reverse().toString();
-  if (par[0] == '(')  // finished left to right
-   remove(reversed, result, 0, 0, new char[]{')', '('});
-  else                // finished right to left
-   result.add(reversed);
+  if (res.isEmpty()) {
+   res.add("");
+  }
+  return res;
+ }
+ private static boolean isValid(String s) {
+  Stack<Character> stack = new Stack<>();
+  for (char c : s.toCharArray()) {
+   if (c == '(') {
+    stack.push(c);
+   } else if (c == ')') {
+    if (!stack.isEmpty() && stack.peek() == '(') {
+     stack.pop();
+    } else {
+     return false;
+    }
+   }
+  }
+  return stack.isEmpty();
  }
 }
