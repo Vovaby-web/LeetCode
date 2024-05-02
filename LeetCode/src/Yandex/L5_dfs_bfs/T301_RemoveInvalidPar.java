@@ -3,7 +3,7 @@ package Yandex.L5_dfs_bfs;
 import java.util.*;
 public class T301_RemoveInvalidPar {
  public static void main(String[] args) {
-  System.out.println(removeInvalidParentheses("(())())"));
+  System.out.println(removeInvalidParentheses(")("));
  }
  public static List<String> removeInvalidParentheses(String s) {
   // Наш результат
