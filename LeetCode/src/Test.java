@@ -1,7 +1,9 @@
 import java.util.*;
 public class Test {
   public static void main(String[] args) {
-    List<Integer> list = new ArrayList<>();
-    list.addFirst(3);
+    Map<Integer, Integer> map = new HashMap<>();
+    map.put(6, 5);
+    map.merge(6, 8, Integer::sum);
+    System.out.println(map);
   }
 }
