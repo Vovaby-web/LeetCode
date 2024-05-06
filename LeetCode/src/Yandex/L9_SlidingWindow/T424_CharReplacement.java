@@ -1,5 +1,5 @@
 // https://leetcode.com/problems/longest-repeating-character-replacement/description/
-package Yandex.L9_SlidingWindow.T480;
+package Yandex.L9_SlidingWindow;
 public class T424_CharReplacement {
   public static void main(String[] args) {
     System.out.println(characterReplacement("AABACCA", 1));

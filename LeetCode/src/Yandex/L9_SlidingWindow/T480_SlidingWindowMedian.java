@@ -1,5 +1,5 @@
 // https://leetcode.com/problems/sliding-window-median/description/
-package Yandex.L9_SlidingWindow.T480;
+package Yandex.L9_SlidingWindow;
 import java.util.*;
 public class T480_SlidingWindowMedian {
   public static void main(String[] args) {

@@ -1,5 +1,5 @@
 // https://leetcode.com/problems/container-with-most-water/description/
-package Yandex.L8_TwoPointers.T11;
+package Yandex.L8_TwoPointers;
 public class T11_ContainerWater {
   public static void main(String[] args) {
     System.out.println(maxArea(new int[]{8,3,5,7,4}));

@@ -1,5 +1,5 @@
 // https://leetcode.com/problems/partition-labels/description/
-package Yandex.L8_TwoPointers.T11;
+package Yandex.L8_TwoPointers;
 import java.util.*;
 public class T763_PartitionLabels {
   public static void main(String[] args) {

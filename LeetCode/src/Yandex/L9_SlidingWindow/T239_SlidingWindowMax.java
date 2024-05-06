@@ -1,31 +1,30 @@
 // https://leetcode.com/problems/sliding-window-maximum/description/
-package Yandex.L9_SlidingWindow.T480;
+package Yandex.L9_SlidingWindow;
 import java.util.*;
 public class T239_SlidingWindowMax {
   public static void main(String[] args) {
-    System.out.println(Arrays.toString(maxSlidingWindow2(new int[]{1,3,-1,-3,5,3,6,7}, 3)));
+    System.out.println(Arrays.toString(maxSlidingWindow(new int[]{4, 3, 2, -1, -3, 5, 3, 6, 7}, 3)));
   }
   // Сложность - O(N\log{k})
   // Память - O(k)
   public static int[] maxSlidingWindow(int[] nums, int k) {
-    PriorityQueue<Integer> queue = new PriorityQueue<>((i1, i2) -> (nums[i2] - nums[i1]));
-    if (nums.length == 0 || k == 0) {
-      return new int[0];
-    }
-    int n = nums.length;
-    int[] result = new int[n - k + 1];
-    for (int i = 0; i < n; i++) {
-      int start = i - k;
-      if (start >= 0) {
-        queue.remove(start);
+      int n = nums.length;
+      int[] result = new int[n - k + 1];
+      Deque<Integer> q = new ArrayDeque<>();
+      for (int i = 0; i < n; i++) {
+        if (!q.isEmpty() && i - (k - 1) > q.peekFirst()) {
+          q.pollFirst();
+        }
+        while (!q.isEmpty() && nums[q.peekLast()] <= nums[i]) {
+          q.pollLast();
+        }
+        q.offer(i);
+        if (i >= k - 1) {
+          result[i - (k - 1)] = nums[q.peekFirst()];
+        }
       }
-      queue.offer(i);
-      if (queue.size() == k) {
-        result[i - k + 1] = nums[queue.peek()];
-      }
+      return result;
     }
-    return result;
-  }
   public static int[] maxSlidingWindow1(int[] nums, int k) {
     PriorityQueue<int[]> q = new PriorityQueue<>((a, b) -> a[0] == b[0] ? a[1] - b[1] : b[0] - a[0]);
     int n = nums.length;
@@ -42,24 +41,7 @@ public class T239_SlidingWindowMax {
     }
     return result;
   }
-  public static int[] maxSlidingWindow2(int[] nums, int k) {
-    int n = nums.length;
-    int[] result = new int[n - k + 1];
-    Deque<Integer> q = new ArrayDeque<>();
-    for (int i = 0, j = 0; i < n; i++) {
-      if (!q.isEmpty() && i - k + 1 > q.peekFirst()) {
-        q.pollFirst();
-      }
-      while (!q.isEmpty() && nums[q.peekLast()] <= nums[i]) {
-        q.pollLast();
-      }
-      q.offer(i);
-      if (i >= k - 1) {
-        result[j++] = nums[q.peekFirst()];
-      }
-    }
-    return result;
-  }
+
   // Самый быстрый способ O(n)
   public static int[] maxSlidingWindow3(int[] nums, int k) {
     if (nums.length == 0 || k == 0) {
