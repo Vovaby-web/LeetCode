@@ -3,10 +3,64 @@ package Yandex.L9_SlidingWindow;
 import java.util.*;
 public class T480_SlidingWindowMedian {
   public static void main(String[] args) {
-    System.out.println(Arrays.toString(medianSlidingWindow3(new int[]{3, 4, 5, 2, 5, 7}, 5)));
+    System.out.println(Arrays.toString(medianSlidingWindow(new int[]{5, 3, -1, 4, 2}, 3)));
   }
-  // Сложность O(n log n)
+  /**
+   * Using Priority Queue. (Here time complexity is not optimized)
+   * Time Complexity: O((N-K)*K + N*log K).
+   * Add Elements = O(N*Log K)
+   * Remove Elements = O((N-K)*K) ==> PQ.remove() in JAVA is O(K)
+   * <p>
+   * Space Complexity: O(K)
+   * <p>
+   * N = Length of nums array. K = Input k.
+   */
   public static double[] medianSlidingWindow(int[] nums, int k) {
+    int n = nums.length;
+    double[] result = new double[n - k + 1];
+    if (k == 1)  return Arrays.stream(nums).asDoubleStream().toArray();
+    PriorityQueue<Integer> left = new PriorityQueue<>(Collections.reverseOrder());
+    PriorityQueue<Integer> right = new PriorityQueue<>();
+    for (int i = 0; i < n; i++) {
+      if (i >= k) {
+        remove(left, right, nums[i - k]);
+      }
+      addElem(left, right, nums[i]);
+      if (i >= k - 1) {
+        result[i - (k - 1)] = median(left, right);
+      }
+    }
+    return result;
+  }
+  private static void addElem(PriorityQueue<Integer> left, PriorityQueue<Integer> right, int n) {
+    left.offer(n);
+    right.offer(left.poll());
+    if (left.size() < right.size()) {
+      left.offer(right.poll());
+    }
+  }
+  private static void remove(PriorityQueue<Integer> left, PriorityQueue<Integer> right, int n) {
+    if (n >= right.peek()) {
+      right.remove(n);
+      if (left.size() == right.size() + 2) {
+        right.offer(left.poll());
+      }
+    } else {
+      left.remove(n);
+      if (left.size() < right.size()) {
+        left.offer(right.poll());
+      }
+    }
+  }
+  private static double median(PriorityQueue<Integer> left, PriorityQueue<Integer> right) {
+    if (left.size() == right.size()) {
+      return ((double) left.peek() + right.peek()) / 2.0;
+    }
+    return left.peek();
+  }
+
+  // Сложность O(n log k)
+  public static double[] medianSlidingWindow3(int[] nums, int k) {
     int n = nums.length;
     int j = 0;
     double[] result = new double[n - k + 1];
@@ -41,54 +95,52 @@ public class T480_SlidingWindowMedian {
     List<Double> medians = new ArrayList<>();
     Map<Integer, Integer> map = new HashMap<>();
     // max куча
-    PriorityQueue<Integer> lo = new PriorityQueue<>((o1, o2) -> o2.compareTo(o1));
+    PriorityQueue<Integer> left = new PriorityQueue<>((o1, o2) -> o2.compareTo(o1));
     // min куча
-    PriorityQueue<Integer> hi = new PriorityQueue<>();
+    PriorityQueue<Integer> right = new PriorityQueue<>();
     int i = 0; // индекс текущего обрабатываемого входящего элемента
-    // инициализировать кучу
     while (i < k) {
-      lo.offer(nums[i++]);
+      left.offer(nums[i++]);
     }
     for (int j = 0; j < k / 2; j++) {
-      hi.offer(lo.poll());
+      right.offer(left.poll());
     }
     while (true) {
       // получить медиану текущего окна
       medians.add(k % 2 == 1 ?
-        (double) lo.peek() : ((double) lo.peek() + (double) hi.peek()) * 0.5);
+        (double) left.peek() : ((double) left.peek() + (double) right.peek()) * 0.5);
       if (i >= nums.length)
         break; // выходим, если обработаны все элементы
       int outNum = nums[i - k]; // исходящий элемент
       int inNum = nums[i++]; // входящий элемент
       int balance = 0; // balance factor
       // число `outNum` выходит из окна
-      balance += (outNum <= lo.peek() ? -1 : 1);
+      balance += (outNum <= left.peek() ? -1 : 1);
       map.put(outNum, map.getOrDefault(outNum, 0) + 1);
       // число `inNum` входит в окно
-      if (!lo.isEmpty() && inNum <= lo.peek()) {
+      if (!left.isEmpty() && inNum <= left.peek()) {
         balance++;
-        lo.offer(inNum);
+        left.offer(inNum);
       } else {
         balance--;
-        hi.offer(inNum);
+        right.offer(inNum);
       }
-      // перебалансировать кучу
       if (balance < 0) { // `lo` нужно больше допустимых элементов
-        lo.offer(hi.poll());
+        left.offer(right.poll());
         balance++;
       }
       if (balance > 0) { // `hi` требует больше допустимых элементов
-        hi.offer(lo.poll());
+        right.offer(left.poll());
         balance--;
       }
       // удалить недопустимые числа, которые следует отбросить из вершин кучи
-      while (map.getOrDefault(lo.peek(), 0) > 0) {
-        map.put(lo.peek(), map.get(lo.peek()) - 1);
-        lo.poll();
+      while (map.getOrDefault(left.peek(), 0) > 0) {
+        map.put(left.peek(), map.get(left.peek()) - 1);
+        left.poll();
       }
-      while (!hi.isEmpty() && map.getOrDefault(hi.peek(), 0) > 0) {
-        map.put(hi.peek(), map.get(hi.peek()) - 1);
-        hi.poll();
+      while (!right.isEmpty() && map.getOrDefault(right.peek(), 0) > 0) {
+        map.put(right.peek(), map.get(right.peek()) - 1);
+        right.poll();
       }
     }
     double[] result = new double[medians.size()];
@@ -171,71 +223,5 @@ public class T480_SlidingWindowMedian {
       return ((double) nums[smallNums.first()] + nums[largeNums.first()]) / 2;
     }
     return nums[smallNums.first()];
-  }
-  // В следующем решении мы используем приоритетную очередь (кучу).
-  // Здесь операция удаления в Java не оптимизирована.
-  /**
-   * Using Priority Queue. (Here time complexity is not optimized)
-   * <p>
-   * Very similar to https://leetcode.com/problems/find-median-from-data-stream/
-   * <p>
-   * Time Complexity: O((N-K)*K + N*log K).
-   * Add Elements = O(N*Log K)
-   * Remove Elements = O((N-K)*K) ==> PQ.remove() in JAVA is O(K)
-   * <p>
-   * Space Complexity: O(K)
-   * <p>
-   * N = Length of nums array. K = Input k.
-   */
-  public static double[] medianSlidingWindow3(int[] nums, int k) {
-    int n = nums.length;
-    double[] result = new double[n - k + 1];
-    if (k == 1) {
-      for (int i = 0; i < n; i++) {
-        result[i] = (double) nums[i];
-      }
-      return result;
-      // return Arrays.stream(nums).asDoubleStream().toArray();
-    }
-    // MaxHeap
-    PriorityQueue<Integer> smallNums = new PriorityQueue<>(Collections.reverseOrder());
-    // Min Heap
-    PriorityQueue<Integer> largeNums = new PriorityQueue<>();
-    for (int i = 0; i < n; i++) {
-      if (i >= k) {
-        remove(smallNums, largeNums, nums[i - k]);
-      }
-      addElem(smallNums, largeNums, nums[i]);
-      if (i >= k - 1) {
-        result[i - (k - 1)] = median(smallNums, largeNums);
-      }
-    }
-    return result;
-  }
-  private static void addElem(PriorityQueue<Integer> left, PriorityQueue<Integer> right, int n) {
-    left.offer(n);
-    right.offer(left.poll());
-    if (left.size() < right.size()) {
-      left.offer(right.poll());
-    }
-  }
-  private static void remove(PriorityQueue<Integer> left, PriorityQueue<Integer> right, int n) {
-    if (n >= right.peek()) {
-      right.remove(n);
-      if (left.size() == right.size() + 2) {
-        right.offer(left.poll());
-      }
-    } else {
-      left.remove(n);
-      if (left.size() < right.size()) {
-        left.offer(right.poll());
-      }
-    }
-  }
-  private static double median(PriorityQueue<Integer> smallNums, PriorityQueue<Integer> largeNums) {
-    if (smallNums.size() == largeNums.size()) {
-      return ((double) smallNums.peek() + largeNums.peek()) / 2.0;
-    }
-    return smallNums.peek();
   }
 }
