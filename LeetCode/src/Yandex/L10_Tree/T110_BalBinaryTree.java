@@ -32,7 +32,6 @@ public class T110_BalBinaryTree {
     if (left == -1 || right == -1 || Math.abs(left - right) > 1) {
       return -1;
     }
-    System.out.println(root.val+" = "+(1 + Math.max(left, right)));
     return 1 + Math.max(left, right);
   }
 }

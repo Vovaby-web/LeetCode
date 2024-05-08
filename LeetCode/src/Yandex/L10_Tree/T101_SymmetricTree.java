@@ -1,3 +1,4 @@
+// https://leetcode.com/problems/symmetric-tree/description/
 package Yandex.L10_Tree;
 import java.util.*;
 public class T101_SymmetricTree {
@@ -17,9 +18,19 @@ public class T101_SymmetricTree {
     }
   }
   public static void main(String[] args) {
-    System.out.println(isSymmetric(
+    System.out.println(isSymmetric1(
       new TreeNode(1, new TreeNode(2, new TreeNode(3), new TreeNode(4)),
         new TreeNode(2, new TreeNode(4), new TreeNode(3)))));
+  }
+  public static boolean isSymmetric1(TreeNode root) {
+    return sc(root, root);
+  }
+  public static boolean sc(TreeNode p, TreeNode q) {
+    if (p == null && q == null)
+      return true;
+    if (p == null || q == null || p.val != q.val)
+      return false;
+    return sc(p.left,q.right)&&sc(p.right,q.left);
   }
   public static boolean isSymmetric(TreeNode root) {
     return dfs(root, root);

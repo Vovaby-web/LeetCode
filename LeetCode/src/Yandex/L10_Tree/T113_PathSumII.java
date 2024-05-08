@@ -1,13 +1,12 @@
-// https://leetcode.com/problems/longest-substring-without-repeating-characters/
-import Yandex.L10_Tree.T113_PathSumII;
-
+// https://leetcode.com/problems/path-sum-ii/description/
+package Yandex.L10_Tree;
 import java.util.*;
-public class Test {
+public class T113_PathSumII {
   public static class TreeNode {
     int val;
     TreeNode left;
     TreeNode right;
-    TreeNode(int val) {
+      TreeNode(int val) {
       this.val = val;
     }
     TreeNode(int val, TreeNode left, TreeNode right) {
@@ -16,11 +15,10 @@ public class Test {
       this.right = right;
     }
   }
-
   public static void main(String[] args) {
     System.out.println(pathSum(
       new TreeNode(1, new TreeNode(2),
-        new TreeNode(3)), 3));
+        new TreeNode(3)),10));
   }
   private static List<List<Integer>> result = new ArrayList<>();
   private static List<Integer> temp = new ArrayList<>();
@@ -28,15 +26,17 @@ public class Test {
     dfs(root, targetSum);
     return result;
   }
-  private static void dfs(TreeNode root, int sum) {
-    if (root == null)
+  private static void dfs(TreeNode root, int x) {
+    if (root == null) {
       return;
-    sum -= root.val;
+    }
+    x -= root.val;
     temp.add(root.val);
-    if (root.left == null && root.right == null && sum == 0)
+    if (root.left == null && root.right == null && x == 0) {
       result.add(new ArrayList<>(temp));
-    dfs(root.left,sum);
-    dfs(root.right,sum);
-    temp.remove(temp.size()-1);
+    }
+    dfs(root.left, x);
+    dfs(root.right, x);
+    temp.remove(temp.size() - 1);
   }
 }
