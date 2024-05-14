@@ -1,16 +1,17 @@
-// https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/description/
+// https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/description/
 package Yandex.L11_GreedyProblems;
-public class T714_BestTimeStock {
+public class T309_BestTimeStock {
   public static void main(String[] args) {
-    System.out.println(maxProfit(new int[]{1, 3, 2, 8, 4, 9}, 2));
+    System.out.println(maxProfit(new int[]{7, 1, 5, 3, 6, 4}));
   }
   // Временная сложность - O(n)
   // Пространственная сложность - O(1);
-  public static int maxProfit(int[] prices, int fee) {
+  public static int maxProfit(int[] prices) {
     // Инициализируем переменные buy и sell.
     // Переменная buy будет содержать наибольшую прибыль, которую мы можем получить после покупки акции,
     // Другими словами - затраты после приобретения акции
     int buy = -prices[0];
+    int prev = 0;
     // Переменная sell будет содержать наибольшую прибыль, которую мы можем получить после продажи акции.
     // Сумма всей прибыли
     int sell = 0;
@@ -20,9 +21,10 @@ public class T714_BestTimeStock {
     // всех возможных транзакций.
     for (int price : prices) {
       // Обновляем прибыль buy после покупки акции, используя формулу Math.max(buy, sell - price).
-      buy = Math.max(buy, sell - price);
+      buy = Math.max(buy, prev - price);
       // Обновляем прибыль sell после продажи акции, используя формулу Math.max(sell, buy + price - fee).
-      sell = Math.max(sell, buy + price - fee);
+      prev = sell;
+      sell = Math.max(sell, buy + price);
     }
     // После завершения цикла возвращаем значение sell, так как оно содержит наибольшую прибыль,
     // которую мы можем получить после всех транзакций.
