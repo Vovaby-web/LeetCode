@@ -30,4 +30,5 @@ public class T763_PartitionLabels {
     }
     return result;
   }
+
 }
