@@ -1,7 +1,7 @@
 package Algorithm;
 public class T5_LongestPalindromicSubstring {
   public static void main(String[] args) {
-    System.out.printf(longestPalindrome1("babad"));
+    System.out.println(longestPalindrome1("babad"));
   }
   public static String longestPalindrome(String s) {
     if (s == null || s.length() < 1) {
@@ -30,13 +30,12 @@ public class T5_LongestPalindromicSubstring {
   static int lo, ro;
   public static String longestPalindrome1(String s) {
     int n = s.length();
-    if (n < 2)
-      return s;
+    if (n < 2) return s;
     for (int i = 0; i < n; i++) {
       // Определяем нечетную длину
       extend(s, i, i);
       // Определяем четную длину
-      extend(s, i, i+1);
+      extend(s, i, i + 1);
     }
     return s.substring(lo, lo + ro);
   }
