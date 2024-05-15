@@ -1,10 +1,8 @@
 package Algorithm;
-
 import java.util.*;
-
 public class T3_LongestSubstring {
   public static void main(String[] args) {
-    System.out.println(lengthOfLongestSubstring("pwwkew"));
+    System.out.println(lengthOfLongestSubstring1("abcac"));
   }
   public static int lengthOfLongestSubstring(String s) {
     int n = s.length();
@@ -37,7 +35,6 @@ public class T3_LongestSubstring {
     }
     return result;
   }
-
   public static int lengthOfLongestSubstring3(String s) {
     int[] a = new int[32];
     int l = 0;
