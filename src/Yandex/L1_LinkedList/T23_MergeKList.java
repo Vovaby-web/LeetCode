@@ -1,4 +1,4 @@
-package Lessons.LeetCode.Yandex.L1_LinkedList;
+package Yandex.L1_LinkedList;
 import java.util.TreeSet;
 public class T23_MergeKList {
   public static class ListNode {
