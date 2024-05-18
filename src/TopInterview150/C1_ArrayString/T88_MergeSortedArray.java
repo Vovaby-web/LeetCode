@@ -1,4 +1,5 @@
-package TopInterview150;
+// https://leetcode.com/problems/merge-sorted-array/description/
+package TopInterview150.C1_ArrayString;
 import java.util.Arrays;
 public class T88_MergeSortedArray {
   public static void main(String[] args) {
@@ -31,5 +32,12 @@ public class T88_MergeSortedArray {
       j--;
       k--;
     }
+  }
+  public static void merge1(int[] nums1, int m, int[] nums2, int n) {
+    if (nums2.length == 0)
+      return;
+    for (int i = m; i < m + n; i++)
+      nums1[i] = nums2[i - m];
+    Arrays.sort(nums1);
   }
 }
