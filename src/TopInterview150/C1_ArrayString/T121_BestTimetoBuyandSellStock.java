@@ -1,6 +1,6 @@
 // https://leetcode.com/problems/best-time-to-buy-and-sell-stock/description/?envType=study-plan-v2&envId=top-interview-150
-package Yandex.L11_GreedyProblems;
-public class T121_BestTimeStock {
+package TopInterview150.C1_ArrayString;
+public class T121_BestTimetoBuyandSellStock {
   public static void main(String[] args) {
     System.out.println(maxProfit(new int[]{7, 1, 5, 3, 6, 4}));
   }
