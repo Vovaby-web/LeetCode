@@ -2,7 +2,7 @@
 package TopInterview150.C1_ArrayString;
 public class T55_JumpGame {
   public static void main(String[] args) {
-    System.out.println(canJump(new int[]{1, 1, 2, 2, 0, 1, 1}));
+    System.out.println(canJump(new int[]{2,0,1,1,4}));
   }
   public static boolean canJump(int[] nums) {
     int max = nums[0];
