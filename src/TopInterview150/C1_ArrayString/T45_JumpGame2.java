@@ -1,8 +1,10 @@
 // https://leetcode.com/problems/jump-game-ii/?envType=study-plan-v2&envId=top-interview-150
 package TopInterview150.C1_ArrayString;
+import java.util.Arrays;
+import java.util.Comparator;
 public class T45_JumpGame2 {
   public static void main(String[] args) {
-    System.out.println(jump(new int[]{2, 3, 1, 1, 4}));
+    System.out.println(jump(new int[]{3, 2, 1, 0, 4}));
   }
   public static int jump(int[] nums) {
     int n = nums.length;
