@@ -3,38 +3,37 @@ package TopInterview150.C3_SlidingWindow;
 import java.util.*;
 public class T76_MinimumWindowSubstring {
   public static void main(String[] args) {
-    System.out.println(minWindow("aaaaaaaaaaaabbbbbcdd", "abcdd"));
+    System.out.println(minWindow("ADOBECODEBANC", "ABC"));
   }
   public static String minWindow(String s, String t) {
     Map<Character, Integer> mask = new HashMap<>();
-    Map<Character, Integer> temp = new HashMap<>();
-    for (char x : t.toCharArray()) {
+    Map<Character, Integer> window = new HashMap<>();
+    for (char x:t.toCharArray())
       mask.merge(x, 1, Integer::sum);
-    }
-    String ans = "";
-    int m = s.length();
-    int n = t.length();
+    int n=t.length();
     int l = 0;
-    int r = 0;
+    int k = -1;
+    int min = Integer.MAX_VALUE;
     int count = 0;
-    while (r < m) {
-      char x = s.charAt(r++);
-      if (mask.containsKey(x)) {
-        temp.merge(x, 1, Integer::sum);
-        if (mask.get(x) < temp.get(x)) {
-          while (l < r && mask.get(s.charAt(l)) < temp.get(s.charAt(l))) {
-            temp.merge(s.charAt(l++), -1, Integer::sum);
-            while (l < r && !mask.containsKey(s.charAt(l)))
-              l++;
-            count--;
-          }
-        }else count++;
-        if (count == n) {
-          if (ans.length() > s.substring(l, r).length() || ans == "")
-            ans = s.substring(l, r);
+    for (int r = 0; r < s.length(); r++) {
+      char x = s.charAt(r);
+      window.merge(x, 1, Integer::sum);
+      mask.merge(x, 0, Integer::sum);
+      if (mask.get(x) >= window.get(x)) {
+        count++;
+      }
+      while (count == n) {
+        if (r - l + 1 < min) {
+          min = r - l + 1;
+          k = l;
         }
+        char y = s.charAt(l++);
+        if (mask.get(y) >= window.get(y)) {
+          count--;
+        }
+        window.merge(y, -1, Integer::sum);
       }
     }
-    return ans;
+    return k < 0 ? "" : s.substring(k, k + min);
   }
 }
