@@ -1,5 +1,5 @@
 // https://leetcode.com/problems/valid-anagram/
-package Lessons.LeetCode.Yandex.L3_HashTable;
+package Yandex.L3_HashTable;
 import java.util.Arrays;
 public class T242_ValidAnagram {
   public static void main(String[] args) {

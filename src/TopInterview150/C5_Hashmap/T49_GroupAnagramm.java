@@ -1,5 +1,5 @@
 // https://leetcode.com/problems/group-anagrams/description/
-package Yandex.L3_HashTable;
+package TopInterview150.C5_Hashmap;
 import java.util.*;
 public class T49_GroupAnagramm {
   public static void main(String[] args) {
