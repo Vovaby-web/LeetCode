@@ -1,3 +1,3 @@
 package TopInterview150.C8_LinkedList;
-public class T141 {
+public class T146_LRUCache {
 }
