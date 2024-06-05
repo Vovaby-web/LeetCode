@@ -1,20 +1,46 @@
 import java.util.*;
 public class Test {
-  public static void main(String[] args) {
-    System.out.println(summaryRanges(new int[]{0, 1, 2, 4, 5, 7}));
-  }
-  public static List<String> summaryRanges(int[] nums) {
-    List<String> ans = new ArrayList<>();
-    for (int i = 0, j, n = nums.length; i < n; i = j + 1) {
-      j = i;
-      while (j+1 < n && nums[j + 1] == nums[j] + 1) {
-        j++;
-      }
-      ans.add(print(nums, i, j));
+  public static class ListNode {
+    int val;
+    ListNode next;
+    ListNode() {
     }
-    return ans;
+    ListNode(int val) {
+      this.val = val;
+    }
+    ListNode(int val, ListNode next) {
+      this.val = val;
+      this.next = next;
+    }
   }
-  private static String print(int[] a, int i, int j) {
-    return i == j ? String.valueOf(a[i]) : String.format("%d->%d", a[i], a[j]);
+
+  public static void main(String[] args) {
+    System.out.println(reverseBetween(new ListNode(3, new ListNode(5)), 1, 2));
+  }
+  public static ListNode reverseBetween(ListNode head, int left, int right) {
+    if (head.next == null || left == right) {
+      return head;
+    }
+    ListNode ans = new ListNode(0,head);
+    ListNode prev = ans;
+    int i = 0;
+    while (i < left - 1) {
+      prev = prev.next;
+      i++;
+    }
+    ListNode l = prev;
+    ListNode r = prev.next;
+    ListNode curr = prev.next;
+    i=0;
+    while (i < right - left + 1) {
+      ListNode t = curr.next;
+      curr.next = prev;
+      prev = curr;
+      curr = t;
+      i++;
+    }
+    l.next = prev;
+    r.next = curr;
+    return ans.next;
   }
 }

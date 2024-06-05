@@ -1,7 +1,6 @@
 // https://leetcode.com/problems/copy-list-with-random-pointer/description/?envType=study-plan-v2&envId=top-interview-150
 package TopInterview150.C8_LinkedList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 public class T138_CopyListwithRandomPointer {
   static class Node {
     int val;
@@ -15,6 +14,25 @@ public class T138_CopyListwithRandomPointer {
     }
   }
   public static void main(String[] args) {
+    Node y=new Node(7);
+    Node z=y;
+    z.next=new Node(13);
+    z=z.next;
+    z.next=new Node(11);
+    z=z.next;
+    z.next=new Node(10);
+    z=z.next;
+    z.next=new Node(1);
+    z=y;
+    z=z.next;
+    z.random=y;
+    z=z.next;
+    Node z1=z;
+    z=z.next;
+    z.random=z1;
+    z=z.next;
+    z1.random=z;
+    Node x=copyRandomList1(y);
   }
   public static Node copyRandomList(Node head) {
     Map<Node, Node> d = new HashMap<>();
@@ -31,5 +49,28 @@ public class T138_CopyListwithRandomPointer {
       tail = tail.next;
     }
     return dummy.next;
+  }
+  public static Node copyRandomList1(Node head) {
+    Map<Node,Node> map=new HashMap<>();
+    Node ans=new Node(0);
+    Node cur=ans;
+    Node x=head;
+    while(x!=null){
+      cur.val=x.val;
+      map.put(x,cur);
+      if (x.next!=null){
+        cur.next=new Node(0);
+        cur=cur.next;
+      }
+      x=x.next;
+    }
+    cur=ans;
+    x=head;
+    while(x!=null){
+      cur.random=map.get(x.random);
+      cur=cur.next;
+      x=x.next;
+    }
+    return ans;
   }
 }
