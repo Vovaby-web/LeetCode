@@ -13,34 +13,37 @@ public class Test {
       this.next = next;
     }
   }
-
   public static void main(String[] args) {
-    System.out.println(reverseBetween(new ListNode(3, new ListNode(5)), 1, 2));
+    System.out.println(reverseKGroup(new ListNode(1, new ListNode(2,
+       new ListNode(3, new ListNode(4, new ListNode(5))))), 2));
   }
-  public static ListNode reverseBetween(ListNode head, int left, int right) {
-    if (head.next == null || left == right) {
-      return head;
+  public static ListNode reverseKGroup(ListNode head, int k) {
+    ListNode ans = new ListNode(0, head);
+    ListNode pre = ans;
+    ListNode cur = ans;
+    while (cur != null) {
+      for (int i = 0; i < k && cur != null; i++)
+        cur = cur.next;
+      if (cur==null)
+        return ans.next;
+      ListNode t=cur.next;
+      cur.next=null;
+      ListNode r=pre.next;
+      pre.next=reverse(pre);
+      pre=r;
+      pre.next=t;
     }
-    ListNode ans = new ListNode(0,head);
-    ListNode prev = ans;
-    int i = 0;
-    while (i < left - 1) {
-      prev = prev.next;
-      i++;
-    }
-    ListNode l = prev;
-    ListNode r = prev.next;
-    ListNode curr = prev.next;
-    i=0;
-    while (i < right - left + 1) {
-      ListNode t = curr.next;
-      curr.next = prev;
-      prev = curr;
-      curr = t;
-      i++;
-    }
-    l.next = prev;
-    r.next = curr;
     return ans.next;
+  }
+  public static ListNode reverse(ListNode head) {
+    ListNode pre = head;
+    ListNode cur = head.next;
+    while(cur!=null){
+      ListNode t=cur.next;
+      cur.next=pre;
+      pre=cur;
+      cur=t;
+    }
+    return pre;
   }
 }

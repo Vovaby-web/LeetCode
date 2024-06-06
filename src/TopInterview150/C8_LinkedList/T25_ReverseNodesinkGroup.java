@@ -20,22 +20,57 @@ public class T25_ReverseNodesinkGroup {
   }
   public static ListNode reverseKGroup(ListNode head, int k) {
     ListNode ans = new ListNode(0, head);
-    ListNode l = ans;
-    while (l.next != null) {
+    ListNode prev = ans;
+    ListNode curr = ans;
+    while (curr.next != null) {
+      for (int i = 0; i < k && curr != null; i++) {
+        curr = curr.next;
+      }
+      if (curr == null) {
+        return ans.next;
+      }
+      ListNode t = curr.next;
+      curr.next = null;
+      ListNode start = prev.next;
+      prev.next = reverseList(start);
+      start.next = t;
+      prev = start;
+      curr = prev;
+    }
+    return ans.next;
+  }
+  private static ListNode reverseList(ListNode head) {
+    ListNode prev = null;
+    ListNode p = head;
+    while (p != null) {
+      ListNode t = p.next;
+      p.next = prev;
+      prev = p;
+      p = t;
+    }
+    return prev;
+  }
+  public static ListNode reverseKGroup1(ListNode head, int k) {
+    ListNode ans = new ListNode(0, head);
+    ListNode l = head;
+    int n = 0;
+    while (l != null) {
+      l = l.next;
+      n++;
+    }
+    l = ans;
+    int m = n / k;
+    for (int i = 0; i < m; i++) {
       ListNode r = l.next;
       ListNode p = l;
       ListNode c = l.next;
-      int i = 0;
-      while (i < k && c != null) {
+      int j = 0;
+      while (j < k) {
         ListNode t = c.next;
         c.next = p;
         p = c;
         c = t;
-        i++;
-      }
-      if (i < k){
-        r.next = c;
-        break;
+        j++;
       }
       l.next = p;
       r.next = c;
