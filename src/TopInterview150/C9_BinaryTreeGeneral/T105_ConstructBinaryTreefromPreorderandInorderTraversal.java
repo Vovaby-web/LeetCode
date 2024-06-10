@@ -19,31 +19,27 @@ public class T105_ConstructBinaryTreefromPreorderandInorderTraversal {
     @Override
     public String toString() {
       return "TreeNode{" +
-        "val=" + val +
-        ", left=" + left +
-        ", right=" + right +
-        '}';
+         "val=" + val +
+         ", left=" + left +
+         ", right=" + right +
+         '}';
     }
   }
   public static void main(String[] args) {
     System.out.println(buildTree(new int[]{3, 9, 20, 15, 7}, new int[]{9, 3, 15, 20, 7}));
   }
-  private static int i = 0;
-  private static int p = 0;
-  public static TreeNode buildTree(int[] preorder, int[] inorder) {
-    return build(preorder, inorder, Integer.MIN_VALUE);
+  static int i, p;
+  public static TreeNode buildTree(int[] pre, int[] in) {
+    i = p = 0;
+    return dfs(pre, in, 3001);
   }
-  private static TreeNode build(int[] preorder, int[] inorder, int stop) {
-    if (p >= preorder.length) {
+  private static TreeNode dfs(int[] pre, int[] in, int right) {
+    if (p == pre.length || in[i] == right)
       return null;
-    }
-    if (inorder[i] == stop) {
-      i++;
-      return null;
-    }
-    TreeNode node = new TreeNode(preorder[p++]);
-    node.left = build(preorder, inorder, node.val);
-    node.right = build(preorder, inorder, stop);
+    TreeNode node = new TreeNode(pre[p++]);
+    node.left = dfs(pre, in, node.val);
+    i++;
+    node.right = dfs(pre, in, right);
     return node;
   }
 }
