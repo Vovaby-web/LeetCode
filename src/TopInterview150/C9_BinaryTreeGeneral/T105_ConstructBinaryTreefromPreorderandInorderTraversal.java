@@ -19,14 +19,14 @@ public class T105_ConstructBinaryTreefromPreorderandInorderTraversal {
     @Override
     public String toString() {
       return "TreeNode{" +
-         "val=" + val +
-         ", left=" + left +
-         ", right=" + right +
-         '}';
+        "val=" + val +
+        ", left=" + left +
+        ", right=" + right +
+        '}';
     }
   }
   public static void main(String[] args) {
-    System.out.println(buildTree(new int[]{3,9,20,15,7},new int[]{9,3,15,20,7}));
+    System.out.println(buildTree(new int[]{3, 9, 20, 15, 7}, new int[]{9, 3, 15, 20, 7}));
   }
   private static int i = 0;
   private static int p = 0;
