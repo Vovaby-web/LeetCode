@@ -32,6 +32,7 @@ public class T105_ConstructBinaryTreefromPreorderandInorderTraversal {
   public static TreeNode buildTree(int[] pre, int[] in) {
     i = p = 0;
     return dfs(pre, in, 3001);
+
   }
   private static TreeNode dfs(int[] pre, int[] in, int right) {
     if (p == pre.length || in[i] == right)

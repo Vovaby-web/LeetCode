@@ -31,7 +31,9 @@ public class T117_PopulatingNextRightPointersinEachNode2 {
     q.offer(root);
     while (!q.isEmpty()) {
       Node p = null;
-      for (int i = 0; i < q.size(); i++) {
+      // i = первоначальному значению размера нашей очереди и если мы туда добавим
+      // элементы, то i меняться не будет
+      for (int i = q.size(); i > 0; i--)  {
         Node node = q.poll();
         if (p != null)
           p.next = node;

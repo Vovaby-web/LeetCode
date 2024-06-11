@@ -1,46 +1,44 @@
 import java.util.*;
 public class Test {
-  public static class TreeNode {
-    int val;
-    TreeNode left;
-    TreeNode right;
-    TreeNode() {
+  private static class Node {
+    public int val;
+    public Node left;
+    public Node right;
+    public Node next;
+    public Node() {
     }
-    TreeNode(int val) {
-      this.val = val;
+    public Node(int _val) {
+      val = _val;
     }
-    TreeNode(int val, TreeNode left, TreeNode right) {
-      this.val = val;
-      this.left = left;
-      this.right = right;
-    }
-    @Override
-    public String toString() {
-      return "TreeNode{" +
-        "val=" + val +
-        ", left=" + left +
-        ", right=" + right +
-        '}';
+    public Node(int _val, Node _left, Node _right, Node _next) {
+      val = _val;
+      left = _left;
+      right = _right;
+      next = _next;
     }
   }
   public static void main(String[] args) {
-    System.out.println(buildTree(new int[]{3, 9, 20, 15, 7}, new int[]{9, 3, 15, 20, 7}));
+    System.out.println(connect(new Node(1, new Node(2, new Node(4), new Node(5), null),
+       new Node(3, null, new Node(7), null), null)));
   }
-  static int i=0;
-  static int p=0;
-  public static TreeNode buildTree(int[] preorder, int[] inorder) {
-   return build(preorder,inorder,-1);
-  }
-  private static TreeNode build(int[] preorder, int[] inorder, int s) {
-   if (p>= preorder.length)
-     return null;
-   if (inorder[i]==s){
-     i++;
-     return null;
-   }
-   TreeNode tree=new TreeNode(preorder[p++]);
-   tree.left=build(preorder,inorder, tree.val);
-   tree.right=build(preorder,inorder, s);
-   return tree;
+  public static Node connect(Node root) {
+    if (root == null)
+      return null;
+    Deque<Node> q = new ArrayDeque<>();
+    q.add(root);
+    while (!q.isEmpty()) {
+      Node cur = null;
+      for (int i = q.size(); i > 0; i--) {
+        Node node = q.poll();
+        if (cur != null)
+          cur.next = node;
+        cur = node;
+        if (cur.left != null)
+          q.add(cur.left);
+        if (cur.right != null)
+          q.add(cur.right);
+      }
+    }
+    return root;
   }
 }
