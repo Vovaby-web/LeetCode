@@ -25,18 +25,18 @@ public class T230_KthSmallestElementinaBST {
   static int x = 0;
   static int kthSmallest(TreeNode root, int k) {
     m = k;
-    kth(root);
+    dfs(root);
     return x;
   }
-  static void kth(TreeNode root) {
+  static void dfs(TreeNode root) {
     if (root == null || m == 0)
       return;
-    kth(root.left);
+    dfs(root.left);
     if (--m == 0) {
       x = root.val;
       return;
     }
-    kth(root.right);
+    dfs(root.right);
   }
   static int kthSmallest1(TreeNode root, int k) {
     Deque<TreeNode> d = new ArrayDeque<>();
