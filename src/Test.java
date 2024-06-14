@@ -1,44 +1,41 @@
 import java.util.*;
 public class Test {
-  private static class Node {
-    public int val;
-    public Node left;
-    public Node right;
-    public Node next;
-    public Node() {
-    }
-    public Node(int _val) {
-      val = _val;
-    }
-    public Node(int _val, Node _left, Node _right, Node _next) {
-      val = _val;
-      left = _left;
-      right = _right;
-      next = _next;
-    }
-  }
   public static void main(String[] args) {
-    System.out.println(connect(new Node(1, new Node(2, new Node(4), new Node(5), null),
-       new Node(3, null, new Node(7), null), null)));
+    List<String> a1 = List.of("a", "b");
+    List<String> a2 = List.of("b", "c");
+    List<String> a3 = List.of("c", "e");
+    List<List<String>> s1 = List.of(a1, a2,a3);
+    List<String> b1 = List.of("a", "e");
+    List<List<String>> s2 = List.of(b1);
+    System.out.println(Arrays.toString(calcEquation(s1, new double[]{2.0, 3.0, 5.0}, s2)));
   }
-  public static Node connect(Node root) {
-    if (root == null)
-      return null;
-    Deque<Node> q = new ArrayDeque<>();
-    q.add(root);
-    while (!q.isEmpty()) {
-      Node cur = null;
-      for (int i = q.size(); i > 0; i--) {
-        Node node = q.poll();
-        if (cur != null)
-          cur.next = node;
-        cur = node;
-        if (cur.left != null)
-          q.add(cur.left);
-        if (cur.right != null)
-          q.add(cur.right);
+  public static double[] calcEquation(List<List<String>> equations, double[] values, List<List<String>> queries) {
+    Map<String, Map<String,Double>> map = new HashMap<>();
+    for (int i = 0; i < equations.size(); i++) {
+      String a=equations.get(i).get(0);
+      String b=equations.get(i).get(1);
+      map.computeIfAbsent(a,k->new HashMap<>()).put(b,values[i]);
+      map.computeIfAbsent(b,k->new HashMap<>()).put(a,1.0/values[i]);
+    }
+    double[] ans = new double[queries.size()];
+    for (int i = 0; i < queries.size(); i++) {
+      ans[i] = dfs(map, queries.get(i).get(0), queries.get(i).get(1), new HashSet<>());
+    }
+    return ans;
+  }
+  private static double dfs(Map<String, Map<String,Double>> m, String a, String b, Set<String> visited) {
+    if (!(m.containsKey(a) && m.containsKey(b)))
+      return -1;
+    if (a.equals(b))
+      return 1;
+    visited.add(a);
+    for (Map.Entry<String, Double> e:m.get(a).entrySet()) {
+      if (!visited.contains(e.getKey())) {
+        double x = dfs(m, e.getKey(), b, visited);
+        if (x != -1)
+          return x * e.getValue();
       }
     }
-    return root;
+    return -1;
   }
 }

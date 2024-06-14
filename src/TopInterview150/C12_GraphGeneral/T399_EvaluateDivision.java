@@ -14,47 +14,46 @@ public class T399_EvaluateDivision {
     List<List<String>> s2 = List.of(b1, b2, b3, b4, b5);
     System.out.println(Arrays.toString(calcEquation(s1, new double[]{2.0, 3.0}, s2)));
   }
-  private static Map<String, String> st;
-  private static Map<String, Double> da;
-  public static double[] calcEquation(
-     List<List<String>> equations, double[] values, List<List<String>> queries) {
-    int n = equations.size();
-    st = new HashMap<>();
-    da = new HashMap<>();
-    for (List<String> e : equations) {
-      st.put(e.get(0), e.get(0));
-      st.put(e.get(1), e.get(1));
-      da.put(e.get(0), 1.0);
-      da.put(e.get(1), 1.0);
+  static class Node {
+    String name;
+    double value;
+    public Node(String d, double v) {
+      name = d;
+      value = v;
     }
-    for (int i = 0; i < n; i++) {
-      List<String> e = equations.get(i);
-      String a = e.get(0);
-      String b = e.get(1);
-      String pa = Search(a);
-      String pb = Search(b);
-      if (Objects.equals(pa, pb))
-        continue;
-      st.put(pa, pb);
-      da.put(pa, da.get(b) * values[i] / da.get(a));
-    }
-    int m = queries.size();
-    double[] ans = new double[m];
-    for (int i = 0; i < m; i++) {
-      String c = queries.get(i).get(0);
-      String d = queries.get(i).get(1);
-      ans[i] = !st.containsKey(c) || !st.containsKey(d) || !Objects.equals(Search(c), Search(d))
-         ? -1.0
-         : da.get(c) / da.get(d);
+  }
+  public static double[] calcEquation(List<List<String>> equations, double[] values, List<List<String>> queries) {
+    Map<String, List<Node>> graph = createGraph(equations, values);
+    double[] ans = new double[queries.size()];
+    for (int i = 0; i < queries.size(); i++) {
+      ans[i] = dfs(queries.get(i).get(0), queries.get(i).get(1), new HashSet<>(), graph);
     }
     return ans;
   }
-  private static String Search(String x) {
-    if (!Objects.equals(st.get(x), x)) {
-      String origin = st.get(x);
-      st.put(x, Search(st.get(x)));
-      da.put(x, da.get(x) * da.get(origin));
+  public static double dfs(String s, String d, Set<String> visited, Map<String, List<Node>> graph) {
+    if (!(graph.containsKey(s) && graph.containsKey(d)))
+      return -1.0;
+    if (s.equals(d))
+      return 1.0;
+    visited.add(s);
+    for (Node neigh : graph.get(s)) {
+      if (!visited.contains(neigh.name)) {
+        double ans = dfs(neigh.name, d, visited, graph);
+        if (ans != -1.0) {
+          return ans * neigh.value;
+        }
+      }
     }
-    return st.get(x);
+    return -1.0;
+  }
+  public static Map<String, List<Node>> createGraph(List<List<String>> equations, double[] values) {
+    Map<String, List<Node>> graph = new HashMap<>();
+    for (int i = 0; i < equations.size(); i++) {
+      String a = equations.get(i).get(0);
+      String b = equations.get(i).get(1);
+      graph.computeIfAbsent(a, k -> new ArrayList()).add(new Node(b, values[i]));
+      graph.computeIfAbsent(b, k -> new ArrayList()).add(new Node(a, 1 / values[i]));
+    }
+    return graph;
   }
 }
