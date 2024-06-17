@@ -1,3 +1,61 @@
+// https://leetcode.com/problems/course-schedule-ii/description/?envType=study-plan-v2&envId=top-interview-150
 package TopInterview150.C12_GraphGeneral;
+import java.util.*;
 public class T210_CourseSchedule2 {
+ public static void main(String[] args) {
+    System.out.println(Arrays.toString(findOrder(4, new int[][]{{1, 0},{1, 2},{0, 1}})));
+  }
+  public static int[] findOrder(int n, int[][] prerequisites) {
+    // —оздайте пустой список смежности дл€ представлени€ ориентированного графа.
+    Map<Integer,List<Integer>> g = new HashMap<>();
+    // —оздайте массив с именем in[n] (количество курсов) и инициализируйте все его элементы значением 0.
+    // ћассив in будет отслеживать количество вход€щих ребер на каждый курс.
+    int[] in = new int[n];
+    // —оздайте пустой ans вектор, чтобы сохранить топологический пор€док курсов.
+    List<Integer> ans = new ArrayList<>();
+    // ¬ыполните итерацию по prerequisites вектору, который содержит пары курсов с указанием
+    // предварительных требований.
+    // ƒл€ каждой пары [a, b] добавьте в список смежности ребро от b до a.
+    // Ёто означает, что курс b должен быть пройден до курса a.
+    // ”величьте in конечно a на 1, так как у него есть еще одно об€зательное условие.
+    for (int[] pair : prerequisites) {
+      int a = pair[0];
+      int b = pair[1];
+      g.computeIfAbsent(b,k->new ArrayList<>()).add(a);
+      in[a]++;
+    }
+    // ¬ыполнение топологической сортировки с использованием алгоритма  ана:
+    // —оздайте пустую очередь, предназначенную q дл€ хранени€ узлов, которые нужно посетить.
+    Queue<Integer> queue = new LinkedList<>();
+    // ѕереберите все курсы (от 0 до n-1) и поставьте in в очередь курсы со значением 0.
+    // Ёти курсы не имеют предварительных условий и могут быть начаты немедленно.
+    for (int i = 0; i < n; i++) {
+      if (in[i] == 0)
+        queue.offer(i);
+    }
+    // ѕока очередь не пуста, сделайте следующее:
+    while (!queue.isEmpty()) {
+      // »звлеките первый элемент из очереди и сохраните его в переменной t.
+      int t = queue.poll();
+      // ƒобавьте t к ans вектору, чтобы отслеживать топологический пор€док.
+      ans.add(t);
+      // ƒл€ каждого соседа x в t списке смежности:
+      // ”меньшите in[x] на 1, так как мы удал€ем необходимое условие t.
+      // ≈сли in[x] становитс€ равным 0, поставьте x в очередь.
+      // Ёто означает, что все услови€ x выполнены.
+      // “оже самое if (g.get(t)!=null) {
+      if (g.containsKey(t)) {
+        for (int x : g.get(t)) {
+          in[x]--;
+          if (in[x] == 0)
+            queue.offer(x);
+        }
+      }
+    }
+    // ≈сли они равны, это означает, что все курсы можно пройти без каких-либо
+    // циклических зависимостей. ¬озвращатьс€ true.
+    if (ans.size()!=n)
+      return new int[]{};
+    return ans.stream().mapToInt(a->a).toArray();
+  }
 }
