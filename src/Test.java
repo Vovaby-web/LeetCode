@@ -1,66 +1,56 @@
 import java.util.*;
 public class Test {
-  //  Этот класс представляет ориентированный граф с использованием списка смежности
-  static class Graph {
-    private int v;  // Количество вершин
-    private LinkedList<Integer> mat[]; // Список смежности
-    // Конструктор
-    Graph(int v) {
-      this.v = v;
-      mat = new LinkedList[v];
-      for (int i = 0; i < v; i++)
-        mat[i] = new LinkedList();
-    }
-    // Функция для добавления ребра в граф
-    void addEdge(int v, int w) {
-      mat[v].add(w);
-    }
-    // Рекурсивная функция, используемая topologicalSort
-    void topologicalSortUtil(int v, boolean visited[], Stack<Integer> stack) {
-      //  Помечаем текущий узел как посещенный
-      visited[v] = true;
-      Integer i;
-      // Рекурсивно вызываем функцию для всех смежных вершин
-      Iterator<Integer> it = mat[v].iterator();
-      while (it.hasNext()) {
-        i = it.next();
-        if (!visited[i])
-          topologicalSortUtil(i, visited, stack);
-      }
-      // Добавляем текущую вершину в стек с результатом
-      stack.push(v);
-    }
-    // Функция для поиска топологической сортировки.
-    // Рекурсивно использует topologicalSortUtil()
-    void topologicalSort() {
-      Stack<Integer> stack = new Stack();
-      // Помечаем все вершины как непосещенные
-      boolean visited[] = new boolean[v];
-      for (int i = 0; i < v; i++)
-        visited[i] = false;
-      // Вызываем рекурсивную вспомогательную функцию
-      // для поиска топологической сортировки для каждой вершины
-      for (int i = 0; i < v; i++)
-        if (visited[i] == false)
-          topologicalSortUtil(i, visited, stack);
-      // Выводим содержимое стека
-      while (stack.empty() == false)
-        System.out.print(stack.pop() + " ");
-    }
-    // Программа для тестирования
-    public static void main(String args[]) {
-      // Создаем граф, приведенный на диаграмме выше
-      Graph g = new Graph(6);
-      g.addEdge(5, 2);
-      g.addEdge(5, 0);
-      g.addEdge(4, 0);
-      g.addEdge(4, 1);
-      g.addEdge(2, 3);
-      g.addEdge(3, 1);
+  static class Node {
+    String word;
+    Map<Integer,Node> next=new HashMap<>();
+  }
+  public static void main(String[] args) {
+    System.out.println(findWords(new char[][]{
+          {'o','a','a','n'},
+          {'e','t','a','e'},
+          {'i','h', 'k','r'},
+          {'i','f','l','v'}},
+       new String[]{"oath","pea","eat","rain"}));
+  }
 
-      System.out.println("Following is a Topological " +
-         "sort of the given graph");
-      g.topologicalSort();
+  static Node root=new Node();
+  static List<String> ans=new ArrayList<>();
+  public static List<String> findWords(char[][] board, String[] words) {
+    for(String s:words){
+      Node node=root;
+      for (char c:s.toCharArray()){
+        int i=c-'a';
+        if (node.next.get(i)==null)
+          node.next.put(i,new Node());
+        node=node.next.get(i);
+      }
+      node.word=s;
     }
+    for (int i=0;i<board.length;i++){
+      for (int j=0;j<board[0].length;j++){
+        dfs(board,root,i,j);
+      }
+    }
+    return ans;
+  }
+  public static void dfs(char[][] board, Node node, int i, int j) {
+    char c=board[i][j];
+    if (node.next.get(c-'a')==null||board[i][j]=='#')
+      return;
+    node=node.next.get(c-'a');
+    if (node.word!=null){
+      ans.add(node.word);
+      node.word=null;
+    }
+    board[i][j]='#';
+    if (i>0)
+      dfs(board, node, i-1, j);
+    if (j>0)
+      dfs(board, node, i, j-1);
+    if (i<board.length-1)
+      dfs(board, node, i+1, j);
+    if (j<board[i].length-1)
+      dfs(board, node, i, j+1);
+    board[i][j]=c;
   }
 }
