@@ -1,4 +1,5 @@
-package Lessons.LeetCode.Yandex.L1_LinkedList;
+// https://leetcode.com/problems/reverse-linked-list/description/
+package Yandex.L1_LinkedList;
 public class T206_BackList {
    static class ListNode {
     int val;

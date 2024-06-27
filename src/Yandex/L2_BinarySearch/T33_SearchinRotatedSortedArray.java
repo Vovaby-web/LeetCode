@@ -1,6 +1,6 @@
 // https://leetcode.com/problems/search-in-rotated-sorted-array/description/
-package Lessons.LeetCode.Yandex.L2_BinarySearch;
-public class T33_SearchRotateSort {
+package Yandex.L2_BinarySearch;
+public class T33_SearchinRotatedSortedArray {
   public static void main(String[] args) {
     int[] a = {1, 2, 3, 4, 5};
     int target = 2;

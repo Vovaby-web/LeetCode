@@ -1,4 +1,5 @@
-package Lessons.LeetCode.Yandex.L1_LinkedList;
+// https://leetcode.com/problems/linked-list-cycle/description/
+package Yandex.L1_LinkedList;
 import java.util.*;
 public class T141_LinkedListCicle {
   static class ListNode {

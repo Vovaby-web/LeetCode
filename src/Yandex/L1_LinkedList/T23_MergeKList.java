@@ -1,3 +1,4 @@
+// https://leetcode.com/problems/merge-k-sorted-lists/description/
 package Yandex.L1_LinkedList;
 import java.util.TreeSet;
 public class T23_MergeKList {
@@ -13,12 +14,12 @@ public class T23_MergeKList {
     }
   }
   public static void main(String[] args) {
-  // Создаем наш список
+    // Создаем наш список
     ListNode[] l = {new ListNode(1, new ListNode(4, new ListNode(5))),
-      new ListNode(1, new ListNode(3, new ListNode(4))),
-      new ListNode(2, new ListNode(6))};
+       new ListNode(1, new ListNode(3, new ListNode(4))),
+       new ListNode(2, new ListNode(6))};
     ListNode[] l1 = {new ListNode(1),
-      new ListNode(0)};
+       new ListNode(0)};
     ListNode node = mergeKLists(l);
     ListNode print = node;
     while (print != null) {
@@ -30,58 +31,66 @@ public class T23_MergeKList {
   }
   public static ListNode mergeKLists(ListNode[] lists) {
     ListNode node = null;
+    if (lists.length == 0)
+      return node;
     TreeSet<Integer> set = new TreeSet<>();
-    if (lists.length > 0) {
-      for (ListNode i : lists) {
-        if (i != null) {
-          // Делаем ссылку на первый элемент i-го списка
-          ListNode current = i;
-          // Если объект существует
-          while (current != null) {
-           // Берем первое значение
-            int x = current.val;
-            // Если наш список результатов пуст
-            if (node == null) {
-              // Тогда создаем наш список результатов со значением нашей переменной
-              node = new ListNode(x);
-            } else {
-              // Иначе делаем ссылку на первый элемент нашего списка результатов
-              ListNode insert = node;
-              // Если первый элемент нашего списка результатов <= нашего текущего элемента
-              if (insert.val <= x) {
-                // Тогда создаем ссылку на первый элемент списка результатов
-                ListNode prev = insert;
-                // Делаем цикл пока значение в списке результатов меньше значения с исходного списка
-                while (insert.val <= x) {
-                  // Ссылка на значение, которое меньше либо равно нашего исходного значения x
-                  prev = insert;
-                  // Если следующего элемента не существует в списке результатов, тогда выходим из цикла
-                  if (insert.next == null)
-                    break;
-                  // Ссылка на значение, которое по окончании цикла будет больше нашего исходного значения x
-                  insert = insert.next;
-                }
-                // Создаем объект с исходным значением - x
-                ListNode next = new ListNode(x);
-                // Добавляем в наш новый список next все элементы, которые больше нашего значения x
-                next.next = prev.next;
-                // Добавляем к текущему значению весь наш список новый список next
-                prev.next = next;
-              } else {
-                // Если первый элемент нашего списка результатов > нашего текущего элемента
-                // Создаем объект с исходным значением - x
-                ListNode prev = new ListNode(x);
-                // Добавляем в наш новый список prev все элементы c нашего списка результатов
-                prev.next = insert;
-                // И теперь у нас новый список результатов
-                node = prev;
+    for (ListNode i : lists) {
+      if (i != null) {
+        ListNode cur = i;               // Делаем ссылку на первый элемент i-го списка
+        while (cur != null) {           // Если объект существует
+          int x = cur.val;              // Берем первое значение
+          if (node == null) {           // Если наш список результатов пуст
+            node = new ListNode(x);     // Тогда создаем наш список результатов со значением нашей переменной
+          } else {
+            ListNode insert = node;     // Иначе делаем ссылку на первый элемент нашего списка результатов
+            if (insert.val <= x) {      // Если первый элемент нашего списка результатов <= нашего текущего элемента
+              ListNode prev = insert;   // Тогда создаем ссылку на первый элемент списка результатов
+              while (insert.val <= x) { // Делаем цикл пока значение в списке результатов меньше значения с исходного списка
+                prev = insert;          // Ссылка на значение, которое меньше либо равно нашего исходного значения x
+                if (insert.next == null)// Если следующего элемента не существует в списке результатов, тогда выходим из цикла
+                  break;
+                insert = insert.next;   // Ссылка на значение, которое по окончании цикла будет больше нашего исходного значения x
               }
+              ListNode next = new ListNode(x); // Создаем объект с исходным значением - x
+              next.next = prev.next;           // Добавляем в наш новый список next все элементы, которые больше нашего значения x
+              prev.next = next;                // Добавляем к текущему значению весь наш список новый список next
+            } else { // Если первый элемент нашего списка результатов > нашего текущего элемента Создаем объект с исходным значением - x
+              ListNode prev = new ListNode(x);
+              prev.next = insert;      // Добавляем в наш новый список prev все элементы c нашего списка результатов
+              node = prev;             // И теперь у нас новый список результатов
             }
-            current = current.next;
           }
+          cur = cur.next;
         }
       }
     }
     return node;
+  }
+  public static ListNode mergeKLists1(ListNode[] lists) {
+    ListNode ans = new ListNode(0);
+    if (lists.length == 0)
+      return null;
+    ListNode cur = ans;
+    for (int i = 0; i < lists.length; i++) {
+      ListNode node = lists[i];
+      cur = ans;
+      while (node != null) {
+        if (cur.next == null) {
+          ListNode t = node.next;
+          node.next = null;
+          cur.next = node;
+          node = t;
+          cur = cur.next;
+        } else if (cur.next.val > node.val) {
+          ListNode t = node.next;
+          node.next = cur.next;
+          cur.next = node;
+          node = t;
+        } else if (cur.next.val <= node.val) {
+          cur = cur.next;
+        }
+      }
+    }
+    return ans.next;
   }
 }

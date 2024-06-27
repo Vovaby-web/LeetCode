@@ -1,4 +1,5 @@
-package Lessons.LeetCode.Yandex.L2_BinarySearch;
+// https://leetcode.com/problems/binary-search/description/
+package Yandex.L2_BinarySearch;
 public class T704_BinarySearch {
   public static void main(String[] args) {
     int[] a = {-1, 0, 3, 5, 9, 12};

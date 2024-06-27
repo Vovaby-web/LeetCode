@@ -1,4 +1,5 @@
-package Lessons.LeetCode.Yandex.L1_LinkedList;
+// https://leetcode.com/problems/add-two-numbers/description/
+package Yandex.L1_LinkedList;
 import java.util.Arrays;
 public class T2_AddTwoNumber {
   static class ListNode {
@@ -9,16 +10,16 @@ public class T2_AddTwoNumber {
     }
   }
   public static void main(String[] args) {
-    ListNode l1 = new ListNode(2);
-    ListNode next = new ListNode(4);
+    ListNode l1 = new ListNode(9);
+    ListNode next = new ListNode(9);
     l1.next = next;
     next = l1.next;
-    next.next = new ListNode(3);
-    ListNode l2 = new ListNode(5);
-    next = new ListNode(6);
+    next.next = new ListNode(9);
+    ListNode l2 = new ListNode(9);
+    next = new ListNode(9);
     l2.next = next;
-    next.next = new ListNode(4);
-    ListNode l = addTwoNumbers(l1, l2);
+    // next.next = new ListNode(9);
+    ListNode l = addTwoNumbers1(l1, l2);
     ListNode pr = l;
     while (pr != null) {
       System.out.print(pr.val + " ");
@@ -80,5 +81,46 @@ public class T2_AddTwoNumber {
       current.next = prev;
     }
     return node;
+  }
+  public static ListNode addTwoNumbers1(ListNode l1, ListNode l2) {
+    if (l1==null&&l2==null)
+      return null;
+    ListNode ans=new ListNode(0);
+    ListNode cur=ans;
+    int x=0;
+    while(l1!=null||l2!=null){
+      if (l1!=null&&l2==null){
+        int y=l1.val+x;
+        if (y>9){
+          y=y%10;
+          x=1;
+        }else x=0;
+        cur.next=new ListNode(y);
+        cur=cur.next;
+        l1=l1.next;
+      }else if (l1==null&&l2!=null){
+        int y=l2.val+x;
+        if (y>9){
+          y=y%10;
+          x=1;
+        }else x=0;
+        cur.next=new ListNode(y);
+        cur=cur.next;
+        l2=l2.next;
+      }else {
+        int y=l1.val+l2.val+x;
+        if (y>9){
+          y=y%10;
+          x=1;
+        }else x=0;
+        cur.next=new ListNode(y);
+        cur=cur.next;
+        l2=l2.next;
+        l1=l1.next;
+      }
+    }
+    if (x==1)
+      cur.next=new ListNode(1);
+    return ans.next;
   }
 }
