@@ -4,8 +4,9 @@ public class T438_FindAnagrams {
   public static List<Integer> findAnagrams(String s, String p) {
     int n = s.length();
     int m = p.length();
-    List<Integer> result = new ArrayList();
-    if (n < m) return result;
+    List<Integer> ans = new ArrayList();
+    if (n < m)
+      return ans;
     char[] k = p.toCharArray();
     Arrays.sort(k);
     p = String.valueOf(k);
@@ -13,8 +14,8 @@ public class T438_FindAnagrams {
       char[] c = s.substring(i, i + m).toCharArray();
       Arrays.sort(c);
       if (String.valueOf(c).equals(p))
-        result.add(i);
+        ans.add(i);
     }
-    return result;
+    return ans;
   }
 }

@@ -28,15 +28,15 @@ public class T18_4Sum {
         while (left < right) {
           long sum = (long) nums[i] + nums[j] + nums[left] + nums[right];
           if (sum < target) {
-            ++left;
+            left++;
           } else if (sum > target) {
-            --right;
+            right--;
           } else {
             result.add(List.of(nums[i], nums[j], nums[left++], nums[right--]));
             while (left < right && nums[left] == nums[left - 1])
-              ++left;
+              left++;
             while (left < right && nums[right] == nums[right + 1])
-              --right;
+              right--;
 
           }
         }
