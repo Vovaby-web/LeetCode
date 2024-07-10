@@ -2,22 +2,28 @@
 package TopInterview150.C1_ArrayString;
 import java.util.*;
 public class T380_InsertDeleteGetRandom {
-  static class RandomizedSet {
-    List<Integer> list;
+  static class RandomizedSet<T> {
+    Map<T,Integer> m;
+    List<T> l;
     public RandomizedSet() {
-      list=new ArrayList<>();
+      m=new HashMap<>();
+      l =new ArrayList<>();
     }
-    public boolean insert(int val) {
-      if (list.contains(val)){
+    public boolean insert(T val) {
+      if (m.containsKey(val)){
         return false;
       }else {
-        list.add(val);
+        m.put(val,l.size());
+        l.add(val);
         return true;
       }
     }
-    public boolean remove(int val) {
-      if (list.contains(val)){
-        list.removeIf(num -> num == val);
+    public boolean remove(T val) {
+      if (m.containsKey(val)){
+        l.set(m.get(val),l.get(l.size()-1));
+        m.put(l.get(l.size()-1),m.get(val));
+        l.remove(l.size()-1);
+        m.remove(val);
         return true;
       }else {
         return false;
@@ -25,10 +31,18 @@ public class T380_InsertDeleteGetRandom {
     }
     public int getRandom() {
       Random rnd = new Random();
-      return list.get(rnd.nextInt(list.size()));
+      return l.indexOf(rnd.nextInt(l.size()));
     }
   }
   public static void main(String[] args) {
-    RandomizedSet set=new RandomizedSet();
+    RandomizedSet s=new RandomizedSet();
+    s.insert(5);
+    s.insert(8);
+    s.insert(10);
+    s.insert(12);
+    s.remove(8);
+
+
+
   }
 }

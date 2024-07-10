@@ -1,4 +1,4 @@
-package Lessons.LeetCode.Yandex.L3_HashTable;
+package Yandex.L3_HashTable;
 import java.util.*;
 public class T438_FindAnagrams {
   public static List<Integer> findAnagrams(String s, String p) {
