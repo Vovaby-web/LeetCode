@@ -1,4 +1,4 @@
-package Lessons.LeetCode.Yandex.L3_HashTable;
+package Tasks.LeetCode.Yandex.L3_HashTable;
 import java.util.Arrays;
 import java.util.HashMap;
 public class T1_TwoSum {
